@@ -17,11 +17,11 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301
  * USA
  */
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+	#include <config.h>
 #endif
 #include <stdlib.h>
 #define _GNU_SOURCE 1
@@ -45,12 +45,12 @@
 
 #include <zip.h>
 
-const char PKG_PATH[] = "PublicStaging";
-const char APPARCH_PATH[] = "ApplicationArchives";
+const char	PKG_PATH[] = "PublicStaging";
+const char	APPARCH_PATH[] = "ApplicationArchives";
 
-char *uuid = NULL;
-char *options = NULL;
-char *appid = NULL;
+char	*uuid = NULL;
+char	*options = NULL;
+char	*appid = NULL;
 
 int list_apps_mode = 0;
 int install_mode = 0;
@@ -61,12 +61,12 @@ int archive_mode = 0;
 int restore_mode = 0;
 int remove_archive_mode = 0;
 
-char *last_status = NULL;
-int wait_for_op_complete = 0;
-int notification_expected = 0;
-int op_completed = 0;
-int err_occured = 0;
-int notified = 0;
+char	*last_status = NULL;
+int		wait_for_op_complete = 0;
+int		notification_expected = 0;
+int		op_completed = 0;
+int		err_occured = 0;
+int		notified = 0;
 
 #ifdef HAVE_LIBIMOBILEDEVICE_1_0
 static void notifier(const char *notification, void *unused)
@@ -78,6 +78,7 @@ static void notifier(const char *notification)
 	notified = 1;
 }
 
+
 #ifdef HAVE_LIBIMOBILEDEVICE_1_1
 static void status_cb(const char *operation, plist_t status, void *unused)
 #else
@@ -88,8 +89,8 @@ static void status_cb(const char *operation, plist_t status)
 		plist_t npercent = plist_dict_get_item(status, "PercentComplete");
 		plist_t nstatus = plist_dict_get_item(status, "Status");
 		plist_t nerror = plist_dict_get_item(status, "Error");
-		int percent = 0;
-		char *status_msg = NULL;
+		int		percent = 0;
+		char	*status_msg = NULL;
 		if (npercent) {
 			uint64_t val = 0;
 			plist_get_uint_val(npercent, &val);
@@ -131,11 +132,12 @@ static void status_cb(const char *operation, plist_t status)
 	}
 }
 
+
 static int zip_f_get_contents(struct zip *zf, const char *filename, int locate_flags, char **buffer, uint32_t *len)
 {
 	struct zip_stat zs;
 	struct zip_file *zfile;
-	int zindex = zip_name_locate(zf, filename, locate_flags);
+	int				zindex = zip_name_locate(zf, filename, locate_flags);
 
 	*buffer = NULL;
 	*len = 0;
@@ -176,10 +178,12 @@ static int zip_f_get_contents(struct zip *zf, const char *filename, int locate_f
 	return 0;
 }
 
+
 static void do_wait_when_needed()
 {
-	int i = 0;
+	int				i = 0;
 	struct timespec ts;
+
 	ts.tv_sec = 0;
 	ts.tv_nsec = 500000000;
 
@@ -197,6 +201,7 @@ static void do_wait_when_needed()
 	}
 }
 
+
 static void print_usage(int argc, char **argv)
 {
 	char *name = NULL;
@@ -206,50 +211,51 @@ static void print_usage(int argc, char **argv)
 	printf("Manage apps on an iDevice.\n\n");
 	printf
 		("  -U, --uuid UUID\tTarget specific device by its 40-digit device UUID.\n"
-		 "  -l, --list-apps\tList apps, possible options:\n"
-		 "       -o list_user\t- list user apps only (this is the default)\n"
-		 "       -o list_system\t- list system apps only\n"
-		 "       -o list_all\t- list all types of apps\n"
-		 "       -o xml\t\t- print full output as xml plist\n"
-		 "  -i, --install ARCHIVE\tInstall app from package file specified by ARCHIVE.\n"
-		 "  -u, --uninstall APPID\tUninstall app specified by APPID.\n"
-		 "  -g, --upgrade APPID\tUpgrade app specified by APPID.\n"
-		 "  -L, --list-archives\tList archived applications, possible options:\n"
-		 "       -o xml\t\t- print full output as xml plist\n"
-		 "  -a, --archive APPID\tArchive app specified by APPID, possible options:\n"
-		 "       -o uninstall\t- uninstall the package after making an archive\n"
-		 "       -o app_only\t- archive application data only\n"
-		 "       -o copy=PATH\t- copy the app archive to directory PATH when done\n"
-		 "       -o remove\t- only valid when copy=PATH is used: remove after copy\n"
-		 "  -r, --restore APPID\tRestore archived app specified by APPID\n"
-		 "  -R, --remove-archive APPID  Remove app archive specified by APPID\n"
-		 "  -o, --options\t\tPass additional options to the specified command.\n"
-		 "  -h, --help\t\tprints usage information\n"
-		 "  -d, --debug\t\tenable communication debugging\n" "\n");
+		"  -l, --list-apps\tList apps, possible options:\n"
+		"       -o list_user\t- list user apps only (this is the default)\n"
+		"       -o list_system\t- list system apps only\n"
+		"       -o list_all\t- list all types of apps\n"
+		"       -o xml\t\t- print full output as xml plist\n"
+		"  -i, --install ARCHIVE\tInstall app from package file specified by ARCHIVE.\n"
+		"  -u, --uninstall APPID\tUninstall app specified by APPID.\n"
+		"  -g, --upgrade APPID\tUpgrade app specified by APPID.\n"
+		"  -L, --list-archives\tList archived applications, possible options:\n"
+		"       -o xml\t\t- print full output as xml plist\n"
+		"  -a, --archive APPID\tArchive app specified by APPID, possible options:\n"
+		"       -o uninstall\t- uninstall the package after making an archive\n"
+		"       -o app_only\t- archive application data only\n"
+		"       -o copy=PATH\t- copy the app archive to directory PATH when done\n"
+		"       -o remove\t- only valid when copy=PATH is used: remove after copy\n"
+		"  -r, --restore APPID\tRestore archived app specified by APPID\n"
+		"  -R, --remove-archive APPID  Remove app archive specified by APPID\n"
+		"  -o, --options\t\tPass additional options to the specified command.\n"
+		"  -h, --help\t\tprints usage information\n"
+		"  -d, --debug\t\tenable communication debugging\n" "\n");
 }
+
 
 static void parse_opts(int argc, char **argv)
 {
-	static struct option longopts[] = {
-		{"help", 0, NULL, 'h'},
-		{"uuid", 1, NULL, 'U'},
-		{"list-apps", 0, NULL, 'l'},
-		{"install", 1, NULL, 'i'},
-		{"uninstall", 1, NULL, 'u'},
-		{"upgrade", 1, NULL, 'g'},
-		{"list-archives", 0, NULL, 'L'},
-		{"archive", 1, NULL, 'a'},
-		{"restore", 1, NULL, 'r'},
-		{"remove-archive", 1, NULL, 'R'},
-		{"options", 1, NULL, 'o'},
-		{"debug", 0, NULL, 'd'},
-		{NULL, 0, NULL, 0}
+	static struct option	longopts[] = {
+		{ "help",			0, NULL, 'h' },
+		{ "uuid",			1, NULL, 'U' },
+		{ "list-apps",		0, NULL, 'l' },
+		{ "install",		1, NULL, 'i' },
+		{ "uninstall",		1, NULL, 'u' },
+		{ "upgrade",		1, NULL, 'g' },
+		{ "list-archives",	0, NULL, 'L' },
+		{ "archive",		1, NULL, 'a' },
+		{ "restore",		1, NULL, 'r' },
+		{ "remove-archive", 1, NULL, 'R' },
+		{ "options",		1, NULL, 'o' },
+		{ "debug",			0, NULL, 'd' },
+		{ NULL,				0, NULL, 0	 }
 	};
-	int c;
+	int						c;
 
 	while (1) {
 		c = getopt_long(argc, argv, "hU:li:u:g:La:r:R:o:d", longopts,
-						(int *) 0);
+						(int*)0);
 		if (c == -1) {
 			break;
 		}
@@ -301,7 +307,7 @@ static void parse_opts(int argc, char **argv)
 			if (!options) {
 				options = strdup(optarg);
 			} else {
-				char *newopts =	malloc(strlen(options) + strlen(optarg) + 2);
+				char *newopts = malloc(strlen(options) + strlen(optarg) + 2);
 				strcpy(newopts, options);
 				free(options);
 				strcat(newopts, ",");
@@ -324,15 +330,16 @@ static void parse_opts(int argc, char **argv)
 	}
 }
 
+
 int main(int argc, char **argv)
 {
-	idevice_t phone = NULL;
-	lockdownd_client_t client = NULL;
-	instproxy_client_t ipc = NULL;
-	np_client_t np = NULL;
-	afc_client_t afc = NULL;
-	uint16_t port = 0;
-	int res = 0;
+	idevice_t			phone = NULL;
+	lockdownd_client_t	client = NULL;
+	instproxy_client_t	ipc = NULL;
+	np_client_t			np = NULL;
+	afc_client_t		afc = NULL;
+	uint16_t			port = 0;
+	int					res = 0;
 
 	parse_opts(argc, argv);
 
@@ -350,8 +357,8 @@ int main(int argc, char **argv)
 	}
 
 	if ((lockdownd_start_service
-		 (client, "com.apple.mobile.notification_proxy",
-		  &port) != LOCKDOWN_E_SUCCESS) || !port) {
+			 (client, "com.apple.mobile.notification_proxy",
+			 &port) != LOCKDOWN_E_SUCCESS) || !port) {
 		fprintf(stderr,
 				"Could not start com.apple.mobile.notification_proxy!\n");
 		goto leave_cleanup;
@@ -375,8 +382,8 @@ int main(int argc, char **argv)
 run_again:
 	port = 0;
 	if ((lockdownd_start_service
-		 (client, "com.apple.mobile.installation_proxy",
-		  &port) != LOCKDOWN_E_SUCCESS) || !port) {
+			 (client, "com.apple.mobile.installation_proxy",
+			 &port) != LOCKDOWN_E_SUCCESS) || !port) {
 		fprintf(stderr,
 				"Could not start com.apple.mobile.installation_proxy!\n");
 		goto leave_cleanup;
@@ -396,16 +403,16 @@ run_again:
 	notification_expected = 0;
 
 	if (list_apps_mode) {
-		int xml_mode = 0;
+		int		xml_mode = 0;
 		plist_t client_opts = instproxy_client_options_new();
 		instproxy_client_options_add(client_opts, "ApplicationType", "User", NULL);
-		instproxy_error_t err;
-		plist_t apps = NULL;
+		instproxy_error_t	err;
+		plist_t				apps = NULL;
 
 		/* look for options */
 		if (options) {
-			char *opts = strdup(options);
-			char *elem = strtok(opts, ",");
+			char	*opts = strdup(options);
+			char	*elem = strtok(opts, ",");
 			while (elem) {
 				if (!strcmp(elem, "list_system")) {
 					if (!client_opts) {
@@ -436,8 +443,8 @@ run_again:
 			goto leave_cleanup;
 		}
 		if (xml_mode) {
-			char *xml = NULL;
-			uint32_t len = 0;
+			char		*xml = NULL;
+			uint32_t	len = 0;
 
 			plist_to_xml(apps, &xml, &len);
 			if (xml) {
@@ -453,9 +460,9 @@ run_again:
 			plist_t app = plist_array_get_item(apps, i);
 			plist_t p_appid =
 				plist_dict_get_item(app, "CFBundleIdentifier");
-			char *s_appid = NULL;
-			char *s_dispName = NULL;
-			char *s_version = NULL;
+			char	*s_appid = NULL;
+			char	*s_dispName = NULL;
+			char	*s_version = NULL;
 			plist_t dispName =
 				plist_dict_get_item(app, "CFBundleDisplayName");
 			plist_t version = plist_dict_get_item(app, "CFBundleVersion");
@@ -489,13 +496,13 @@ run_again:
 		}
 		plist_free(apps);
 	} else if (install_mode || upgrade_mode) {
-		plist_t sinf = NULL;
-		plist_t meta = NULL;
-		char *pkgname = NULL;
+		plist_t		sinf = NULL;
+		plist_t		meta = NULL;
+		char		*pkgname = NULL;
 		struct stat fst;
-		FILE *f = NULL;
-		uint64_t af = 0;
-		char buf[8192];
+		FILE		*f = NULL;
+		uint64_t	af = 0;
+		char		buf[8192];
 
 		port = 0;
 		if ((lockdownd_start_service(client, "com.apple.afc", &port) !=
@@ -518,16 +525,16 @@ run_again:
 		}
 
 		/* open install package */
-		int errp = 0;
-		struct zip *zf = zip_open(appid, 0, &errp);
+		int			errp = 0;
+		struct zip	*zf = zip_open(appid, 0, &errp);
 		if (!zf) {
 			fprintf(stderr, "ERROR: zip_open: %s: %d\n", appid, errp);
 			goto leave_cleanup;
 		}
 
 		/* extract iTunesMetadata.plist from package */
-		char *zbuf = NULL;
-		uint32_t len = 0;
+		char		*zbuf = NULL;
+		uint32_t	len = 0;
 		if (zip_f_get_contents(zf, "iTunesMetadata.plist", 0, &zbuf, &len) == 0) {
 			meta = plist_new_data(zbuf, len);
 		}
@@ -574,7 +581,7 @@ run_again:
 		}
 
 		char *sinfname = NULL;
-	       	if (asprintf(&sinfname, "Payload/%s.app/SC_Info/%s.sinf", bundlename, bundlename) < 0) {
+		if (asprintf(&sinfname, "Payload/%s.app/SC_Info/%s.sinf", bundlename, bundlename) < 0) {
 			fprintf(stderr, "Out of memory!?\n");
 			goto leave_cleanup;
 		}
@@ -634,7 +641,7 @@ run_again:
 
 		size_t amount = 0;
 		do {
-			amount = fread(buf, 1, sizeof(buf), f);
+			amount = fread(buf, 1, sizeof (buf), f);
 			if (amount > 0) {
 				uint32_t written, total = 0;
 				while (total < amount) {
@@ -655,8 +662,7 @@ run_again:
 					goto leave_cleanup;
 				}
 			}
-		}
-		while (amount > 0);
+		} while (amount > 0);
 
 		afc_file_close(afc, af);
 		fclose(f);
@@ -699,15 +705,15 @@ run_again:
 		wait_for_op_complete = 1;
 		notification_expected = 1;
 	} else if (list_archives_mode) {
-		int xml_mode = 0;
-		plist_t dict = NULL;
-		plist_t lres = NULL;
-		instproxy_error_t err;
+		int					xml_mode = 0;
+		plist_t				dict = NULL;
+		plist_t				lres = NULL;
+		instproxy_error_t	err;
 
 		/* look for options */
 		if (options) {
-			char *opts = strdup(options);
-			char *elem = strtok(opts, ",");
+			char	*opts = strdup(options);
+			char	*elem = strtok(opts, ",");
 			while (elem) {
 				if (!strcmp(elem, "xml")) {
 					xml_mode = 1;
@@ -735,8 +741,8 @@ run_again:
 		}
 
 		if (xml_mode) {
-			char *xml = NULL;
-			uint32_t len = 0;
+			char		*xml = NULL;
+			uint32_t	len = 0;
 
 			plist_to_xml(lres, &xml, &len);
 			if (xml) {
@@ -747,8 +753,8 @@ run_again:
 			goto leave_cleanup;
 		}
 		plist_dict_iter iter = NULL;
-		plist_t node = NULL;
-		char *key = NULL;
+		plist_t			node = NULL;
+		char			*key = NULL;
 
 		printf("Total: %d archived apps\n", plist_dict_get_size(lres));
 		plist_dict_new_iter(lres, &iter);
@@ -762,8 +768,8 @@ run_again:
 			node = NULL;
 			plist_dict_next_item(lres, iter, &key, &node);
 			if (key && (plist_get_node_type(node) == PLIST_DICT)) {
-				char *s_dispName = NULL;
-				char *s_version = NULL;
+				char	*s_dispName = NULL;
+				char	*s_version = NULL;
 				plist_t dispName =
 					plist_dict_get_item(node, "CFBundleDisplayName");
 				plist_t version =
@@ -786,27 +792,26 @@ run_again:
 				free(s_dispName);
 				free(key);
 			}
-		}
-		while (node);
+		} while (node);
 		plist_free(dict);
 	} else if (archive_mode) {
-		char *copy_path = NULL;
-		int remove_after_copy = 0;
-		int skip_uninstall = 1;
-		int app_only = 0;
+		char	*copy_path = NULL;
+		int		remove_after_copy = 0;
+		int		skip_uninstall = 1;
+		int		app_only = 0;
 		plist_t client_opts = NULL;
 
 		/* look for options */
 		if (options) {
-			char *opts = strdup(options);
-			char *elem = strtok(opts, ",");
+			char	*opts = strdup(options);
+			char	*elem = strtok(opts, ",");
 			while (elem) {
 				if (!strcmp(elem, "uninstall")) {
 					skip_uninstall = 0;
 				} else if (!strcmp(elem, "app_only")) {
 					app_only = 1;
 				} else if ((strlen(elem) > 5) && !strncmp(elem, "copy=", 5)) {
-					copy_path = strdup(elem+5);
+					copy_path = strdup(elem + 5);
 				} else if (!strcmp(elem, "remove")) {
 					remove_after_copy = 1;
 				}
@@ -875,8 +880,8 @@ run_again:
 				afc = NULL;
 				goto leave_cleanup;
 			}
-			FILE *f = NULL;
-			uint64_t af = 0;
+			FILE		*f = NULL;
+			uint64_t	af = 0;
 			/* local filename */
 			char *localfile = NULL;
 			if (asprintf(&localfile, "%s/%s.ipa", copy_path, appid) < 0) {
@@ -899,8 +904,8 @@ run_again:
 				goto leave_cleanup;
 			}
 
-			uint32_t fsize = 0;
-			char **fileinfo = NULL;
+			uint32_t	fsize = 0;
+			char		**fileinfo = NULL;
 			if ((afc_get_file_info(afc, remotefile, &fileinfo) != AFC_E_SUCCESS) || !fileinfo) {
 				fprintf(stderr, "ERROR getting AFC file info for '%s' on device!\n", remotefile);
 				fclose(f);
@@ -910,9 +915,9 @@ run_again:
 			}
 
 			int i;
-			for (i = 0; fileinfo[i]; i+=2) {
+			for (i = 0; fileinfo[i]; i += 2) {
 				if (!strcmp(fileinfo[i], "st_size")) {
-					fsize = atoi(fileinfo[i+1]);
+					fsize = atoi(fileinfo[i + 1]);
 					break;
 				}
 			}
@@ -944,12 +949,12 @@ run_again:
 			free(remotefile);
 			free(localfile);
 
-			uint32_t amount = 0;
-			uint32_t total = 0;
-			char buf[8192];
+			uint32_t	amount = 0;
+			uint32_t	total = 0;
+			char		buf[8192];
 
 			do {
-				if (afc_file_read(afc, af, buf, sizeof(buf), &amount) != AFC_E_SUCCESS) {
+				if (afc_file_read(afc, af, buf, sizeof (buf), &amount) != AFC_E_SUCCESS) {
 					fprintf(stderr, "AFC Read error!\n");
 					break;
 				}
@@ -1021,7 +1026,7 @@ run_again:
 
 	do_wait_when_needed();
 
-  leave_cleanup:
+leave_cleanup:
 	if (np) {
 		np_client_free(np);
 	}
@@ -1048,3 +1053,5 @@ run_again:
 
 	return res;
 }
+
+
