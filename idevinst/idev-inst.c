@@ -1,3 +1,10 @@
+/*************************************************************************
+	This program should merge idevicenistaller.c
+	  and ifuse.c to accomplish the automation backup process.
+
+						--Murray
+ *************************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 
