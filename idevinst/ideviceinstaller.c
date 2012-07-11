@@ -20,7 +20,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301
  * USA
  */
-#ifdef HAVE_CONFIG_H
+
+# include <unistd.h>
+# include <sys/types.h>
+ 
+ #ifdef HAVE_CONFIG_H
     #include <config.h>
 #endif
 #include <stdlib.h>
@@ -341,6 +345,13 @@ int main(int argc, char **argv)
     uint16_t			port = 0;
     int					res = 0;
 
+	if (getuid() != 0)	{
+		puts("You should have root priviledge to execute this program.");
+		exit(1);
+	}
+	chdir("/beckie");	/* choose /beckie to be our working directory    --Murray */
+	system("mkdir appdata");
+	
     parse_opts(argc, argv);
 
     argc -= optind;
@@ -461,7 +472,7 @@ run_again:
         uint32_t i = 0;
         for (i = 0; i < plist_array_get_size(apps); i++) {
 		
-		/* this is the place where we should add our codes */
+		/* this is the place where we should add our codes    --Murray */
 		
             plist_t app = plist_array_get_item(apps, i);
             plist_t p_appid =
@@ -469,6 +480,8 @@ run_again:
             char	*s_appid = NULL;
             char	*s_dispName = NULL;
             char	*s_version = NULL;
+			char	syscmd[1024] = "";
+
             plist_t dispName =
                 plist_dict_get_item(app, "CFBundleDisplayName");
             plist_t version = plist_dict_get_item(app, "CFBundleVersion");
@@ -497,6 +510,15 @@ run_again:
             } else {
                 printf("%s - %s\n", s_appid, s_dispName);
             }
+
+			sprintf(syscmd, "ifuse appdata --appid %s", s_appid);
+			printf("DEBUG! cmd: %s\n", syscmd);
+			system(syscmd);
+			sprintf(syscmd, "cp -dprvf appdata app-%s", s_appid);
+			printf("DEBUG! cmd: %s\n", syscmd);
+			system(syscmd);
+			system("umount appdata");
+			
             free(s_dispName);
             free(s_appid);
         }
@@ -802,8 +824,8 @@ run_again:
         plist_free(dict);
     } else if (archive_mode) {
 	
-	/* the place where we should merge into the list-app loop */
-	
+	/* the place where we should merge into the list-app loop    --Murray */
+
         char	*copy_path = NULL;
         int		remove_after_copy = 0;
         int		skip_uninstall = 1;
