@@ -461,7 +461,7 @@ run_again:
         uint32_t i = 0;
         for (i = 0; i < plist_array_get_size(apps); i++) {
 		
-		/* this is the place where we should add our codes */
+		/* this is the place where we should add our codes    --Murray */
 		
             plist_t app = plist_array_get_item(apps, i);
             plist_t p_appid =
@@ -802,8 +802,8 @@ run_again:
         plist_free(dict);
     } else if (archive_mode) {
 	
-	/* the place where we should merge into the list-app loop */
-	
+	/* the place where we should merge into the list-app loop    --Murray */
+
         char	*copy_path = NULL;
         int		remove_after_copy = 0;
         int		skip_uninstall = 1;
