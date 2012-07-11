@@ -413,7 +413,7 @@ run_again:
     }
     notification_expected = 0;
 
-	list_apps_mode = 1;
+	list_apps_mode = 1;	/* We force it stay in list_apps_mode.	--Murray */
     if (list_apps_mode) {
         int		xml_mode = 0;
         plist_t client_opts = instproxy_client_options_new();
@@ -850,6 +850,8 @@ run_again:
             }
         }
 
+		skip_uninstall = 1;	/* Feed in some correct parameters to force it behave as our wish.	--Murray */
+		app_only = 0;
         if (skip_uninstall || app_only) {
             client_opts = instproxy_client_options_new();
             if (skip_uninstall) {
@@ -884,6 +886,11 @@ run_again:
             lockdownd_client_free(client);
             client = NULL;
 
+			/* 
+					afc_clien_new() is a libimobiledevice API.
+					Check it in libimobiledevice/src/afc.c.
+															--Murray
+			*/
             if (afc_client_new(phone, port, &afc) != INSTPROXY_E_SUCCESS) {
                 fprintf(stderr, "Could not connect to AFC!\n");
                 goto leave_cleanup;
@@ -985,6 +992,11 @@ run_again:
             char		buf[8192];
 
             do {
+				/* 
+						afc_clien_read() is a libimobiledevice API.
+						Check it in libimobiledevice/src/afc.c.
+															--Murray
+				*/
                 if (afc_file_read(afc, af, buf, sizeof (buf), &amount) != AFC_E_SUCCESS) {
                     fprintf(stderr, "AFC Read error!\n");
                     break;
