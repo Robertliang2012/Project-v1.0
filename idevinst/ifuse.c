@@ -22,7 +22,7 @@
 #define FUSE_USE_VERSION  26
 
 #ifdef HAVE_CONFIG_H
-#include <config.h>
+#include <config-ifuse.h>
 #endif /* HAVE_CONFIG_H */
 
 #include <fuse.h>
