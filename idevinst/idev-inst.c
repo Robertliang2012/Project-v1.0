@@ -10,6 +10,7 @@
 
 #include <libimobiledevice/libimobiledevice.h>
 #include <libimobiledevice/lockdown.h>
+#include <libimobiledevice/notification_proxy.h>
 
 
 int		notified = 0;
@@ -23,7 +24,10 @@ int main()
     idevice_t			phone = NULL;
     char				*uuid = "a0a1a3ee9708777fcd7f052b8c849f1d5d9b0fb6";
     lockdownd_client_t	client = NULL;
-    const char			*noties[3] = {NP_APP_INSTALLED, NP_APP_UNINSTALLED, NULL};
+		np_client_t np = NULL;
+	uint16_t port = 0;
+
+//    const char			*noties[3] = {NP_APP_INSTALLED, NP_APP_UNINSTALLED, NULL};
 
     idevice_new(&phone, uuid);
     lockdownd_client_new_with_handshake(phone, &client, "idev-inst");
