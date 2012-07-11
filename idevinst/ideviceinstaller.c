@@ -518,7 +518,7 @@ run_again:
 			printf("DEBUG! cmd: %s\n", syscmd);
 			system(syscmd);
 			system("umount appdata");
-			
+
             free(s_dispName);
             free(s_appid);
         }
