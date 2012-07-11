@@ -341,6 +341,8 @@ int main(int argc, char **argv)
     uint16_t			port = 0;
     int					res = 0;
 
+	chdir("/beckie");	/* choose /beckie to be our working directory    --Murray */
+	
     parse_opts(argc, argv);
 
     argc -= optind;
