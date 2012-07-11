@@ -2,6 +2,7 @@
 #include <stdlib.h>
 
 #include <libimobiledevice/libimobiledevice.h>
+#include <libimobiledevice/lockdown.h>
 
 int main()
 {
@@ -20,22 +21,6 @@ int main()
 		puts("Couldn't connect to the lockdownd. Exiting")
 		exit(1);
 	}
-	
-	if ((lockdownd_start_service
-		 (client, "com.apple.mobile.notification_proxy",
-		  &port) != LOCKDOWN_E_SUCCESS) || !port) {
-		fprintf(stderr,
-				"Could not start com.apple.mobile.notification_proxy!\n");
-		goto leave_cleanup;
-	}
-	
-	if (np_client_new(phone, port, &np) != NP_E_SUCCESS) {
-		puts("Could not connect to notification_proxy!\n");
-		goto leave_cleanup;
-	}
-	
-	
-	
 	
 	return 0;
 }
