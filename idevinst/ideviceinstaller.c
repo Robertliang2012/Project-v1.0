@@ -740,7 +740,7 @@ run_again:
 				However, if I add a sleep command "sleep(20)", the program can run complete.
 																Anna
 			*/
-			sleep(20);
+			sleep(3);
 			
 			//goto leave_cleanup;
 		}
