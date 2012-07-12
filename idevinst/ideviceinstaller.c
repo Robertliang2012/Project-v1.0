@@ -511,15 +511,12 @@ run_again:
             }
 
             sprintf(syscmd, "ifuse appdata --appid %s", s_appid);
-<<<<<<< HEAD
             system(syscmd);
             sprintf(syscmd, "cp -dprvf appdata app-%s", s_appid);
-=======
             //printf("DEBUG! cmd: %s\n", syscmd);
             system(syscmd);
             sprintf(syscmd, "cp -dprvf appdata app-%s", s_appid);
             //printf("DEBUG! cmd: %s\n", syscmd);
->>>>>>> origin/master
             system(syscmd);
             system("umount appdata");
 			
@@ -1095,11 +1092,8 @@ run_again:
         }
 
 		free(copy_path);
-<<<<<<< HEAD
-		copy_path = strdup(".");
-=======
+
 		copy_path = strdup(".");	/* We choose copy_path to be always the current directory(./). --Murray*/
->>>>>>> origin/master
 	//	copy_path = s4copy;
         if (copy_path) {
             struct stat fst;
