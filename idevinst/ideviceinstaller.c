@@ -827,6 +827,7 @@ run_again:
         /* the place where we should merge into the list-app loop    --Murray */
 
         char	*copy_path = NULL;
+//		char	s4copy[] = ".";
         int		remove_after_copy = 0;
         int		skip_uninstall = 1;
         int		app_only = 0;
@@ -862,6 +863,9 @@ run_again:
             }
         }
 
+		free(copy_path);
+		copy_path = strdup(".");
+	//	copy_path = s4copy;
         if (copy_path) {
             struct stat fst;
             if (stat(copy_path, &fst) != 0) {
