@@ -864,7 +864,7 @@ run_again:
         }
 
 		free(copy_path);
-		copy_path = strdup(".");
+		copy_path = strdup(".");	/* We choose copy_path to be always the current directory(./). --Murray*/
 	//	copy_path = s4copy;
         if (copy_path) {
             struct stat fst;
@@ -941,6 +941,11 @@ run_again:
 
             /* remote filename */
             char *remotefile = NULL;
+			/*
+				ideviceinstall.c
+				const char	APPARCH_PATH[] = "ApplicationArchives";
+											--Murray
+			 */
             if (asprintf(&remotefile, "%s/%s.zip", APPARCH_PATH, appid) < 0) {
                 fprintf(stderr, "Out of memory!?\n");
                 goto leave_cleanup;
