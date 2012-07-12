@@ -740,6 +740,17 @@ run_again:
                     }
                 }
                 /*
+                    We still have to call some according procedures in leave_cleanup over here.
+                    Check lockdownd_client_new() in the libimobiledevice source code pool
+                        and we can find the interesting comments as follows,
+
+                 *	The device disconnects automatically if the lockdown connection
+                 *	idles for more than 10 seconds.
+
+                                                        --Murray
+                 */
+
+                /*
                     There is something wrong when I mark goto leave_cleanup.
                     However, if I add a sleep command "sleep(20)", the program can run complete.
                                                                     Anna
