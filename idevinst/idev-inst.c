@@ -15,17 +15,19 @@
 #define DIR_HOME	"/beckie"
 #define DIR_APPDATA	"/beckie/appdata"
 
-int cdworkdir(void);
+int mkworkdir(void);
 
 int main()
 {
-	cdworkdir();
+	mkworkdir();
+	
+	
     return 0;
 }
 
-int cdworkdir()
+int mkworkdir()
 {
-	struct stat	unused;
+	struct stat	st;
 	int	n;
 
 	if (chdir(DIR_HOME) < 0)	{
@@ -33,10 +35,16 @@ int cdworkdir()
 		exit(1);
 	}
 
-	n = stat(DIR_APPDATA, &unused);
-	if (n < 0 && errno == ENOENT)	{
-		mkdir(DIR_APPDATA, 0644);
-	}
-	
+	n = stat(DIR_APPDATA, &st);
+	if (n < 0)	{
+		if (errno != ENOENT)	{
+			perror("stat");
+			exit(1);
+		} else	{
+			mkdir(DIR_APPDATA, 0755);
+		}
+	} else if (st.st_mode != 0755)
+		chmod(DIR_APPDATA, 0755);
+
 	return n;
 }
