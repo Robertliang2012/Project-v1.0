@@ -350,7 +350,7 @@ int main(int argc, char **argv)
         exit(1);
     }
     chdir("/beckie");   /* choose /beckie to be our working directory    --Murray */
-    system("mkdir appdata");
+    system("mkdir appdata 2> /dev/null");
 
     parse_opts(argc, argv);
 
