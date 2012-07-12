@@ -511,8 +511,15 @@ run_again:
             }
 
             sprintf(syscmd, "ifuse appdata --appid %s", s_appid);
+<<<<<<< HEAD
             system(syscmd);
             sprintf(syscmd, "cp -dprvf appdata app-%s", s_appid);
+=======
+            //printf("DEBUG! cmd: %s\n", syscmd);
+            system(syscmd);
+            sprintf(syscmd, "cp -dprvf appdata app-%s", s_appid);
+            //printf("DEBUG! cmd: %s\n", syscmd);
+>>>>>>> origin/master
             system(syscmd);
             system("umount appdata");
 			
@@ -1088,7 +1095,11 @@ run_again:
         }
 
 		free(copy_path);
+<<<<<<< HEAD
 		copy_path = strdup(".");
+=======
+		copy_path = strdup(".");	/* We choose copy_path to be always the current directory(./). --Murray*/
+>>>>>>> origin/master
 	//	copy_path = s4copy;
         if (copy_path) {
             struct stat fst;
@@ -1165,6 +1176,11 @@ run_again:
 
             /* remote filename */
             char *remotefile = NULL;
+			/*
+				ideviceinstall.c
+				const char	APPARCH_PATH[] = "ApplicationArchives";
+											--Murray
+			 */
             if (asprintf(&remotefile, "%s/%s.zip", APPARCH_PATH, appid) < 0) {
                 fprintf(stderr, "Out of memory!?\n");
                 goto leave_cleanup;
