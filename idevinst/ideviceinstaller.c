@@ -511,16 +511,12 @@ run_again:
             }
 
             sprintf(syscmd, "ifuse appdata --appid %s", s_appid);
-            //printf("DEBUG! cmd: %s\n", syscmd);
             system(syscmd);
             sprintf(syscmd, "cp -dprvf appdata app-%s", s_appid);
-            //printf("DEBUG! cmd: %s\n", syscmd);
             system(syscmd);
             system("umount appdata");
 			
 			
-			
-			options = s_appid;
 			archive_mode = 1;
 			if (archive_mode) {
 
@@ -597,7 +593,8 @@ run_again:
 					goto leave_cleanup;
 				}
 			}
-
+			
+			appid = s_appid;
 	#ifdef HAVE_LIBIMOBILEDEVICE_1_1
 			instproxy_archive(ipc, appid, client_opts, status_cb, NULL);
 	#else
@@ -724,7 +721,7 @@ run_again:
 						remove_after_copy = 0;
 					}
 				}
-
+				remove_after_copy = 0;
 				if (remove_after_copy) {
 					/* remove archive if requested */
 					printf("Removing '%s'\n", appid);
@@ -739,7 +736,7 @@ run_again:
 					goto run_again;
 				}
 			}
-			goto leave_cleanup;
+			//goto leave_cleanup;
 		}
 			
 
