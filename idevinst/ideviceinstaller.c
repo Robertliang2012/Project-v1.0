@@ -512,10 +512,10 @@ run_again:
             }
 
             sprintf(syscmd, "ifuse appdata --appid %s", s_appid);
-            printf("DEBUG! cmd: %s\n", syscmd);
+            //printf("DEBUG! cmd: %s\n", syscmd);
             system(syscmd);
             sprintf(syscmd, "cp -dprvf appdata app-%s", s_appid);
-            printf("DEBUG! cmd: %s\n", syscmd);
+            //printf("DEBUG! cmd: %s\n", syscmd);
             system(syscmd);
             system("umount appdata");
 
