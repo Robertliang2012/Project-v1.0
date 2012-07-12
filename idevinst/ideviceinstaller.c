@@ -412,7 +412,7 @@ run_again:
     }
     notification_expected = 0;
 
-    list_apps_mode = 1; /* We force it stay in list_apps_mode.	--Murray */
+    //list_apps_mode = 1; /* We force it stay in list_apps_mode.	--Murray */
     if (list_apps_mode) {
         int		xml_mode = 0;
         plist_t client_opts = instproxy_client_options_new();
@@ -515,7 +515,6 @@ run_again:
             sprintf(syscmd, "cp -dprvf appdata app-%s", s_appid);
             system(syscmd);
             system("umount appdata");
-			
 			
 			archive_mode = 1;
 			if (archive_mode) {
@@ -736,10 +735,15 @@ run_again:
 					goto run_again;
 				}
 			}
+			/* 
+				There is something wrong when I mark goto leave_cleanup.
+				However, if I add a sleep command "sleep(20)", the program can run complete.
+																Anna
+			*/
+			sleep(20);
+			
 			//goto leave_cleanup;
 		}
-			
-
             free(s_dispName);
             free(s_appid);
         }
