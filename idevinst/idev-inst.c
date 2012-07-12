@@ -5,52 +5,38 @@
                         --Murray
 *************************************************************************/
 
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <errno.h>
 
-#include <libimobiledevice/libimobiledevice.h>
-#include <libimobiledevice/lockdown.h>
-#include <libimobiledevice/notification_proxy.h>
+#define DIR_HOME	"/beckie"
+#define DIR_APPDATA	"/beckie/appdata"
 
-
-int		notified = 0;
-
-static void notifier(const char *, void *);
-
+int cdworkdir(void);
 
 int main()
 {
-    idevice_t			phone = NULL;
-    char				*uuid = "a0a1a3ee9708777fcd7f052b8c849f1d5d9b0fb6";
-    lockdownd_client_t	client = NULL;
-	np_client_t 		np = NULL;
-    const char			*noties[3] = {NP_APP_INSTALLED, NP_APP_UNINSTALLED, NULL};
-	uint16_t 			port = 0;
-	int 				notification_expected = 0;
-
-//    const char			*noties[3] = {NP_APP_INSTALLED, NP_APP_UNINSTALLED, NULL};
-
-    idevice_new(&phone, uuid);
-    lockdownd_client_new_with_handshake(phone, &client, "idev-inst");
-    lockdownd_start_service(client, "com.apple.mobile.notification_proxy", &port);
-    np_client_new(phone, port, &np);
-	
-    np_set_notify_callback(np, notifier, NULL);
-	np_observe_notifications(np, noties);
-	
-	setbuf(stdout, NULL);
-	
-	notification_expected = 0;
-
+	cdworkdir();
     return 0;
 }
 
-	
-	
-	
-
-
-static void notifier(const char *notification, void *unused)
+int cdworkdir()
 {
-	notified = 1;
+	struct stat	unused;
+	int	n;
+
+	if (chdir(DIR_HOME) < 0)	{
+		perror("chdir");
+		exit(1);
+	}
+
+	n = stat(DIR_APPDATA, &unused);
+	if (n < 0 && errno == ENOENT)	{
+		mkdir(DIR_APPDATA, 0644);
+	}
+	
+	return n;
 }
