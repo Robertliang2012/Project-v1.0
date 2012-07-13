@@ -110,7 +110,6 @@ static void status_cb(const char *operation, plist_t status)
             if (last_status && (strcmp(last_status, status_msg))) {
                 printf("\n");
             }
-
             if (!npercent) {
                 printf("%s - %s\n", operation, status_msg);
             } else {
@@ -599,7 +598,7 @@ run_again:
 
                 appid = s_appid;
 #ifdef HAVE_LIBIMOBILEDEVICE_1_1
-                instproxy_archive(ipc, appid, client_opts, status_cb, NULL);
+                instproxy_archive(ipc, appid, client_opts, NULL, NULL);
 #else
                 instproxy_archive(ipc, appid, client_opts, status_cb);
 #endif
@@ -713,8 +712,7 @@ run_again:
                         }
                     } while (amount > 0);
 
-                    afc_file_close(afc, af);
-                    fclose(f);
+
 
                     printf("done.\n");
                     if (total != fsize) {
@@ -739,6 +737,8 @@ run_again:
                         goto run_again;
                     }
                 }
+
+
                 /*
                     We still have to call some according procedures in leave_cleanup over here.
                     Check lockdownd_client_new() in the libimobiledevice source code pool
@@ -756,10 +756,8 @@ run_again:
                                                                     Anna
                  */
 //<<<<<<< HEAD
+/*
 
-                if (np) {
-                    np_client_free(np);
-                }
                 if (ipc) {
                     instproxy_client_free(ipc);
                 }
@@ -783,17 +781,23 @@ run_again:
                 if (instproxy_client_new(phone, port, &ipc) != INSTPROXY_E_SUCCESS) {
                     fprintf(stderr, "Anna ipc --- Could not connect to installation_proxy!\n");
                 }
-
                 if (afc_client_new(phone, port, &afc) != INSTPROXY_E_SUCCESS) {
                     fprintf(stderr, "Anna  afc -- Could not connect to AFC!\n");
 
                 }
+                if (np_client_new(phone, port, &np) != NP_E_SUCCESS) {
+                    fprintf(stderr, "Could not connect to notification_proxy!\n");
+                    goto leave_cleanup;
+                }
 
 
+                np_set_notify_callback(np, notifier, NULL);
 
+                const char *noties[3] = {NP_APP_INSTALLED, NP_APP_UNINSTALLED, NULL};
 
+                np_observe_notifications(np, noties);
 
-                //notification_expected = 0;
+ */
 //=======
                 //goto leave_cleanup;
                 //               >> >> >> > origin / master
@@ -1183,7 +1187,7 @@ run_again:
         }
 
 #ifdef HAVE_LIBIMOBILEDEVICE_1_1
-        instproxy_archive(ipc, appid, client_opts, status_cb, NULL);
+        instproxy_archive(ipc, appid, client_opts, NULL, NULL);
 #else
         instproxy_archive(ipc, appid, client_opts, status_cb);
 #endif
@@ -1304,6 +1308,10 @@ run_again:
 
             afc_file_close(afc, af);
             fclose(f);
+
+            wait_for_op_complete = 1;
+            notification_expected = 1;
+            do_wait_when_needed();
 
             printf("done.\n");
             if (total != fsize) {
