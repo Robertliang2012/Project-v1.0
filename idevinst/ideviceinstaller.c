@@ -755,7 +755,22 @@ run_again:
                     However, if I add a sleep command "sleep(20)", the program can run complete.
                                                                     Anna
                  */
-                //goto leave_cleanup;
+                if (ipc) {
+                    instproxy_client_free(ipc);
+                }
+                if (afc) {
+                    afc_client_free(afc);
+                }
+
+                idevice_new(&phone, uuid);
+                lockdownd_client_new_with_handshake(phone, &client, "ideviceinstaller");
+                lockdownd_start_service(client, "com.apple.mobile.notification_proxy", &port);
+                instproxy_client_new(phone, port, &ipc);
+                np_client_new(phone, port, &np);
+                np_set_notify_callback(np, notifier, NULL);
+                np_observe_notifications(np, noties);
+
+
             }
 
             free(s_dispName);
