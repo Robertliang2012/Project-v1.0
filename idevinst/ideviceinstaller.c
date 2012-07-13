@@ -755,6 +755,7 @@ run_again:
                     However, if I add a sleep command "sleep(20)", the program can run complete.
                                                                     Anna
                  */
+<<<<<<< HEAD
                 if (ipc) {
                     instproxy_client_free(ipc);
                 }
@@ -771,6 +772,9 @@ run_again:
                 np_observe_notifications(np, noties);
 
 
+=======
+                //goto leave_cleanup;
+>>>>>>> origin/master
             }
 
             free(s_dispName);
