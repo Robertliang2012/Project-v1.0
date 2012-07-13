@@ -715,6 +715,8 @@ run_again:
 
                     afc_file_close(afc, af);
                     fclose(f);
+                    notification_expected = 1;
+                    do_wait_when_needed();      /* Murray's */
 
                     printf("done.\n");
                     if (total != fsize) {

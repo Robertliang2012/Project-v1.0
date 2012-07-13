@@ -23,6 +23,8 @@ int main()
 
                 ipc is the most important to command iPhone.
 
+        afc: Apple File Connection
+        http://theiphonewiki.com/wiki/index.php?title=AFC
 
             afc_client_new()	->	get afc
             afc_get_file_info()	->	get fileinfo; fileinfo contains file size
