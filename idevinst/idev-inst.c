@@ -19,9 +19,16 @@ int main()
 
                 client & port are both vital to communicate with iPhone
 
-            instproxy_client_new()					-> to get ipc
+            instproxy_client_new()	-> to get ipc
 
                 ipc is the most important to command iPhone.
+
+
+            afc_client_new()	->	get afc
+            afc_get_file_info()	->	get fileinfo; fileinfo contains file size
+            afc_file_open()		->	get af; af is the file handler in libimobiledevice
+            afc_file_read()		->	actually read file
+            afc_file_close()	->	close it
 
 
             np_client_new()				-> to get np (which stands for notification)
