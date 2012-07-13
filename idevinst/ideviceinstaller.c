@@ -584,7 +584,7 @@ run_again:
                     }
 
                     lockdownd_client_free(client);
-                    //client = NULL;
+                    client = NULL;
 
                     /*
                             afc_client_new() is a libimobiledevice API.
@@ -756,21 +756,42 @@ run_again:
                                                                     Anna
                  */
 //<<<<<<< HEAD
+
                 if (np) {
                     np_client_free(np);
                 }
                 if (ipc) {
                     instproxy_client_free(ipc);
-
+                }
+                if (afc) {
+                    afc_client_free(afc);
+                }
+                if (client) {
+                    lockdownd_client_free(client);
                 }
                 ipc = NULL;
                 afc = NULL;
                 np = NULL;
-                instproxy_client_new(phone, port, &ipc);
-                afc_client_new(phone, port, &afc);
-                np_client_new(phone, port, &np);
-                //np_set_notify_callback(np, notifier, NULL);
-                //np_observe_notifications(np, noties);
+                client = NULL;
+
+
+                if ((lockdownd_start_service(client, "com.apple.afc", &port) != LOCKDOWN_E_SUCCESS) || !port) {
+                    fprintf(stderr, "Anna -- Could not start com.apple.afc!\n");
+                }
+                if (instproxy_client_new(phone, port, &ipc) != INSTPROXY_E_SUCCESS) {
+                    fprintf(stderr, "Anna ---Could not connect to installation_proxy!\n");
+                }
+                if (LOCKDOWN_E_SUCCESS != lockdownd_client_new_with_handshake(phone, &client, "ideviceinstaller")) {
+                    fprintf(stderr, "Could not connect to lockdownd. Exiting.\n");
+                }
+                if (afc_client_new(phone, port, &afc) != INSTPROXY_E_SUCCESS) {
+                    fprintf(stderr, "Anna --Could not connect to AFC!\n");
+
+                }
+
+
+
+
 
                 //notification_expected = 0;
 //=======
