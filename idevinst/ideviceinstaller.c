@@ -774,18 +774,18 @@ run_again:
                 np = NULL;
                 client = NULL;
 
-
+                if (LOCKDOWN_E_SUCCESS != lockdownd_client_new_with_handshake(phone, &client, "ideviceinstaller")) {
+                    fprintf(stderr, "Anna client --- Could not connect to lockdownd. Exiting.\n");
+                }
                 if ((lockdownd_start_service(client, "com.apple.afc", &port) != LOCKDOWN_E_SUCCESS) || !port) {
-                    fprintf(stderr, "Anna -- Could not start com.apple.afc!\n");
+                    fprintf(stderr, "Anna port -- Could not start com.apple.afc!\n");
                 }
                 if (instproxy_client_new(phone, port, &ipc) != INSTPROXY_E_SUCCESS) {
-                    fprintf(stderr, "Anna ---Could not connect to installation_proxy!\n");
+                    fprintf(stderr, "Anna ipc --- Could not connect to installation_proxy!\n");
                 }
-                if (LOCKDOWN_E_SUCCESS != lockdownd_client_new_with_handshake(phone, &client, "ideviceinstaller")) {
-                    fprintf(stderr, "Could not connect to lockdownd. Exiting.\n");
-                }
+
                 if (afc_client_new(phone, port, &afc) != INSTPROXY_E_SUCCESS) {
-                    fprintf(stderr, "Anna --Could not connect to AFC!\n");
+                    fprintf(stderr, "Anna  afc -- Could not connect to AFC!\n");
 
                 }
 
