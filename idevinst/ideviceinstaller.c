@@ -584,7 +584,7 @@ run_again:
                     }
 
                     lockdownd_client_free(client);
-                    client = NULL;
+                    //client = NULL;
 
                     /*
                             afc_client_new() is a libimobiledevice API.
@@ -755,26 +755,27 @@ run_again:
                     However, if I add a sleep command "sleep(20)", the program can run complete.
                                                                     Anna
                  */
-<<<<<<< HEAD
+//<<<<<<< HEAD
+                if (np) {
+                    np_client_free(np);
+                }
                 if (ipc) {
                     instproxy_client_free(ipc);
-                }
-                if (afc) {
-                    afc_client_free(afc);
-                }
 
-                idevice_new(&phone, uuid);
-                lockdownd_client_new_with_handshake(phone, &client, "ideviceinstaller");
-                lockdownd_start_service(client, "com.apple.mobile.notification_proxy", &port);
+                }
+                ipc = NULL;
+                afc = NULL;
+                np = NULL;
                 instproxy_client_new(phone, port, &ipc);
+                afc_client_new(phone, port, &afc);
                 np_client_new(phone, port, &np);
-                np_set_notify_callback(np, notifier, NULL);
-                np_observe_notifications(np, noties);
+                //np_set_notify_callback(np, notifier, NULL);
+                //np_observe_notifications(np, noties);
 
-
-=======
+                //notification_expected = 0;
+//=======
                 //goto leave_cleanup;
->>>>>>> origin/master
+                //               >> >> >> > origin / master
             }
 
             free(s_dispName);
