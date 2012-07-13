@@ -14,4 +14,3 @@ ifuse:	ifuse.c config-ifuse.h
 
 clean:
 	rm ideviceinstaller idev-inst ifuse
-	
